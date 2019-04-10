@@ -1,7 +1,3 @@
-import argparse
-import pycosat
-import logging
-
 import slitherlinky
 
 layout = \
@@ -23,9 +19,6 @@ allclues = [ list(map(int, x)) for x in
   [ '0123', '0132', '0213', '0231', '0312', '0321'
   , '1023', '1032', '1203', '1302', '2013', '2103'
   ] ]
-
-#allclues = [ list(map(int, x)) for x in
-#  ([ '0000' ] * 12) ]
 
 def setup(s, clueset):
     s.solution = None
@@ -66,17 +59,17 @@ def search(chosen, available):
             print(e)
             return
         if s.solution is not None:
+            print()
             for line in s.cells:
                 print(''.join(['.' if x is None else str(x) for x in line]))
-            #s.draw_solution()
         return
 
     if count_potential_solutions(chosen) == 0:
-        #print("no solutions at depth {}".format(len(chosen)))
         return
 
-    for n in available:
-        rest = available[1:]
+    for i in range(len(available)):
+        n = available[i]
+        rest = available[:i] + available[i+1:]
         search(chosen + [n], rest)
         search(chosen + [n[::-1]], rest)
 
