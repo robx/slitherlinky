@@ -146,7 +146,7 @@ class Slitherlinky(object):
             clauses = constraint_fn[len(edges)](*edges)
             self.loop_constraints += clauses
 
-    def call_sat_solver(self, verify=False):
+    def call_sat_solver(self, validate=True, verify=False):
         """
         Moves the variables and constraints to the SAT solver.
         """
@@ -155,7 +155,7 @@ class Slitherlinky(object):
         count = 0
         for solution in pycosat.itersolve(constraints):
             test_solution = [edge for edge in solution if edge > 0]
-            result = self.validate(test_solution)
+            result = not validate or self.validate(test_solution)
             if result:
                 self.solution = test_solution
                 count += 1
